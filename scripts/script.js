@@ -53,8 +53,8 @@ window.addEventListener("DOMContentLoaded", function () {
       if (target.classList.contains("close-btn")) {
         handlerMenu();
       } else {
-        target = target.closest("li");
-        if (target) {
+        //target = target.closest("li");
+        if (target.tagName === "A") {
           handlerMenu();
         }
       }
