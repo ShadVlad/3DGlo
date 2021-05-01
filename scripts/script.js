@@ -1,5 +1,5 @@
 window.addEventListener("DOMContentLoaded", function () {
-  "use strict";
+  ("use strict");
 
   function countTimer(deadline) {
     let timerHours = document.querySelector("#timer-hours"),
@@ -32,6 +32,32 @@ window.addEventListener("DOMContentLoaded", function () {
     updateClock();
     setInterval(updateClock, 1000);
   }
-
   countTimer("30 july 2021");
+
+  // menu
+  const toggleMenu = () => {
+    const btnMenu = document.querySelector(".menu"),
+      menu = document.querySelector("menu"),
+      closeBtn = document.querySelector(".close-btn"),
+      menuItems = menu.querySelectorAll("ul>li");
+
+    const handlerMenu = () => {
+      // if (
+      //   !menu.style.transform ||
+      //   menu.style.transform === `translate(-100%)`
+      // ) {
+      //   menu.style.transform = `translate(0)`;
+      // } else {
+      //   menu.style.transform = `translate(-100%)`;
+      // }
+      menu.classList.toggle("active-menu");
+    };
+    btnMenu.addEventListener("click", handlerMenu);
+    closeBtn.addEventListener("click", handlerMenu);
+
+    menuItems.forEach((element) =>
+      element.addEventListener("click", handlerMenu)
+    );
+  };
+  toggleMenu();
 });
