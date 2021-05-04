@@ -268,4 +268,155 @@ window.addEventListener("DOMContentLoaded", function () {
   };
 
   slider();
+
+  // command
+  const command = () => {
+    const commands = document.querySelector(".command");
+    commands.addEventListener("mouseover", (event) => {
+      if (event.target.matches(".command__photo")) {
+        event.target.src = event.target.dataset.img;
+        //console.log("event.target.src: ", event.target.dataset.img);
+      }
+    });
+
+    commands.addEventListener("mouseout", (event) => {
+      if (event.target.matches(".command__photo")) {
+        event.target.src = event.target.dataset.img.replace("a.", ".");
+        //console.log("event.target.src: ", event.target.dataset.img);
+      }
+    });
+  };
+
+  command();
+
+  //calculator
+  const calculator = () => {
+    const summInput = document.querySelectorAll(".calc-item");
+    console.log("nameInput: ", summInput);
+
+    const readInputSumm = (event) => {
+      //console.log("event: ", event);
+      event.target.value = event.target.value.replace(/[^0-9]/, "");
+    };
+
+    summInput.forEach((item) => {
+      //console.log("item: ", item);
+      item.addEventListener("keyup", readInputSumm);
+    });
+  };
+  calculator();
+
+  //connect
+  const connect = () => {
+    const formInput = document.querySelectorAll("form"),
+      nameInput = document.querySelectorAll("input[name='user_name']"),
+      messageInput = document.querySelectorAll("input[name='user_message']"),
+      emailInput = document.querySelectorAll("input[name='user_email']"),
+      phoneInput = document.querySelectorAll("input[name='user_phone']");
+    console.log("formInput: ", formInput);
+
+    const readInputName = (event) => {
+      //console.log("nameInput: ", event);
+      event.target.value = event.target.value.replace(/[^А-Яа-яЁё\s\W]+$/, "");
+    };
+    const readInputPhone = (event) => {
+      //console.log("nameInput: ", event);
+      event.target.value = event.target.value.replace(/[^\d\-\()]/, "");
+    };
+
+    const readInputEmail = (event) => {
+      //console.log("nameInput: ", event);
+      event.target.value = event.target.value.replace(
+        /[^A-Za-z\.\@\-\!\*\'\~]/,
+        ""
+      );
+    };
+
+    const fixedName = () => {
+      let val = event.target.value.replace(/\-{2,}/g, "-");
+      val = val.split(/\s+/);
+      event.target.value = val
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" ");
+      console.log(
+        "value: ",
+        val.map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")
+      );
+    };
+
+    const fixedText = () => {
+      let val = event.target.value.replace(/\-{2,}/g, "-");
+      val = val.split(/\s+/);
+      val[0] = val[0].charAt(0).toUpperCase() + val[0].slice(1);
+      //val.map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+      event.target.value = val.map((w) => w).join(" ");
+    };
+    const fixedPhone = () => {
+      let val = event.target.value.replace(/[^\d\()\-]/, "");
+      //console.log("val: ", val);
+      val = val.replace(/\-{2,}/g, "-");
+      //console.log("val: ", val);
+      event.target.value = val;
+      //console.log("event: ", event.target.value);
+    };
+    const fixedEmail = () => {
+      let val = event.target.value.replace(/[^A-Za-z\.\@\-\!\*\'\~]/g, "");
+      val = val.replace(/\-{2,}/g, "-");
+      val = val.replace(/\-/, "");
+      val = val.replace(/\-$/, "");
+      event.target.value = val;
+      console.log("event: ", val);
+    };
+    formInput.forEach((item) => {
+      item.addEventListener("keyup", (event) => {
+        if (
+          event.target.matches("input[name='user_name']") ||
+          event.target.matches("input[name='user_message']")
+        ) {
+          console.log("event.target: ", event.target);
+          readInputName(event);
+          //event.target.addEventListener("blur", correct);
+        } else if (event.target.matches("input[name='user_email']")) {
+          readInputEmail(event);
+        } else if (event.target.matches("input[name='user_phone']")) {
+          readInputPhone(event);
+        }
+      });
+      // item.addEventListener("blur", (event) => {
+      //   console.log("event.target: ", event.target);
+      // });
+    });
+    nameInput.forEach((item) => {
+      //item.addEventListener("keyup", readInputName);
+      item.addEventListener("blur", (event) => {
+        //console.log("event.target blur: ", event.target);
+        fixedName();
+      });
+    });
+
+    messageInput.forEach((item) => {
+      //item.addEventListener("keyup", readInputName);
+      item.addEventListener("blur", (event) => {
+        //console.log("event.target: ", event.target);
+        fixedText();
+      });
+    });
+
+    phoneInput.forEach((item) => {
+      //item.addEventListener("keyup", readInputPhone);
+      item.addEventListener("blur", (event) => {
+        console.log("event.target: ", event.target);
+        fixedPhone();
+      });
+    });
+
+    emailInput.forEach((item) => {
+      //item.addEventListener("keyup", readInputEmail);
+      item.addEventListener("blur", (event) => {
+        //console.log("event.target: ", event.target);
+        fixedEmail();
+      });
+    });
+  };
+  connect();
 });
