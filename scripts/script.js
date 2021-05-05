@@ -535,7 +535,7 @@ window.addEventListener("DOMContentLoaded", function () {
           errorData(request.status);
         }
       });
-      request.open("POST", "../server.php");
+      request.open("POST", "server.php");
       request.setRequestHeader("Content-Type", "application/json");
 
       request.send(JSON.stringify(body));
