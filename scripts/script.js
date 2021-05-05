@@ -299,7 +299,7 @@ window.addEventListener("DOMContentLoaded", function () {
       totalValue = document.getElementById("total"),
       summInput = document.querySelectorAll(".calc-item");
 
-    console.log("totalValue: ", totalValue.textContent);
+    //console.log("totalValue: ", totalValue.textContent);
     const countSum = () => {
       let total = 0,
         countValue = 1,
@@ -366,15 +366,23 @@ window.addEventListener("DOMContentLoaded", function () {
       messageInput = document.querySelectorAll("input[name='user_message']"),
       emailInput = document.querySelectorAll("input[name='user_email']"),
       phoneInput = document.querySelectorAll("input[name='user_phone']");
-    console.log("formInput: ", formInput);
+    //console.log("formInput: ", formInput);
 
     const readInputName = (event) => {
       //console.log("nameInput: ", event);
-      event.target.value = event.target.value.replace(/[^А-Яа-яЁё\s\W]+$/, "");
+      event.target.value = event.target.value.replace(/[^А-Яа-яЁё\s]+$/, "");
+    };
+
+    const readInputMessage = (event) => {
+      //console.log("nameInput: ", event);
+      event.target.value = event.target.value.replace(
+        /[^?!,.а-яА-ЯёЁ0-9]+$/,
+        ""
+      );
     };
     const readInputPhone = (event) => {
       //console.log("nameInput: ", event);
-      event.target.value = event.target.value.replace(/[^\d\-\()]/, "");
+      event.target.value = event.target.value.replace(/[^\d\+]/, "");
     };
 
     const readInputEmail = (event) => {
@@ -391,10 +399,10 @@ window.addEventListener("DOMContentLoaded", function () {
       event.target.value = val
         .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
         .join(" ");
-      console.log(
-        "value: ",
-        val.map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")
-      );
+      // console.log(
+      //   "value: ",
+      //   val.map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")
+      // );
     };
 
     const fixedText = () => {
@@ -405,7 +413,7 @@ window.addEventListener("DOMContentLoaded", function () {
       event.target.value = val.map((w) => w).join(" ");
     };
     const fixedPhone = () => {
-      let val = event.target.value.replace(/[^\d\()\-]/, "");
+      let val = event.target.value.replace(/[^\d\+]/, "");
       //console.log("val: ", val);
       val = val.replace(/\-{2,}/g, "-");
       //console.log("val: ", val);
@@ -418,17 +426,16 @@ window.addEventListener("DOMContentLoaded", function () {
       val = val.replace(/\-/, "");
       val = val.replace(/\-$/, "");
       event.target.value = val;
-      console.log("event: ", val);
+      //console.log("event: ", val);
     };
     formInput.forEach((item) => {
       item.addEventListener("keyup", (event) => {
-        if (
-          event.target.matches("input[name='user_name']") ||
-          event.target.matches("input[name='user_message']")
-        ) {
-          console.log("event.target: ", event.target);
+        if (event.target.matches("input[name='user_name']")) {
+          //console.log("event.target: ", event.target);
           readInputName(event);
           //event.target.addEventListener("blur", correct);
+        } else if (event.target.matches("input[name='user_message']")) {
+          readInputMessage(event);
         } else if (event.target.matches("input[name='user_email']")) {
           readInputEmail(event);
         } else if (event.target.matches("input[name='user_phone']")) {
@@ -458,7 +465,7 @@ window.addEventListener("DOMContentLoaded", function () {
     phoneInput.forEach((item) => {
       //item.addEventListener("keyup", readInputPhone);
       item.addEventListener("blur", (event) => {
-        console.log("event.target: ", event.target);
+        //console.log("event.target: ", event.target);
         fixedPhone();
       });
     });
@@ -472,4 +479,88 @@ window.addEventListener("DOMContentLoaded", function () {
     });
   };
   connect();
+
+  // send ajax form
+  const sendForm = (form) => {
+    const errorMessage = "Что-то пошло не так...",
+      loadMessage = "Загрузка...",
+      successMessage = "Спасибо! Мы скоро с Вами свяжемся!";
+
+    console.log("form: ", form.id);
+
+    const statusMessage = document.createElement("div");
+    statusMessage.style.cssText = "font-size: 2rem;";
+
+    if (form.id === "form3") {
+      statusMessage.style.color = "white";
+    }
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      form.appendChild(statusMessage);
+      const formData = new FormData(form);
+      //console.log("formData: ", formData);
+      let body = {};
+
+      // for (const val of formData.entries) {
+      //   body[val[0]] = val[1]
+      // }
+      formData.forEach((val, key) => {
+        body[key] = val;
+      });
+      //console.log("body: ", body);
+
+      postData(
+        body,
+        () => {
+          statusMessage.textContent = successMessage;
+        },
+        (error) => {
+          statusMessage.textContent = errorMessage;
+        }
+      );
+    });
+
+    const postData = (body, outputData, errorData) => {
+      const request = new XMLHttpRequest();
+      request.addEventListener("readystatechange", () => {
+        statusMessage.textContent = loadMessage;
+        if (request.readyState !== 4) {
+          return;
+        }
+        if (request.status === 200) {
+          outputData();
+          clearForm();
+        } else {
+          errorData(request.status);
+        }
+      });
+      request.open("POST", "../server.php");
+      request.setRequestHeader("Content-Type", "application/json");
+
+      request.send(JSON.stringify(body));
+    };
+
+    const clearForm = () => {
+      const nameInput = form.querySelector("input[name='user_name']"),
+        emailInput = form.querySelector("input[name='user_email']"),
+        messageInput = form.querySelector("input[name='user_message']"),
+        phoneInput = form.querySelector("input[name='user_phone']");
+      //console.log("phoneInput: ", phoneInput.value);
+      nameInput.value = "";
+      emailInput.value = "";
+      phoneInput.value = "";
+      if (messageInput) {
+        messageInput.value = "";
+      }
+      //console.log("nameInput: ", nameInput);
+    };
+    // (messageInput = document.querySelectorAll("input[name='user_message']")),
+    // (emailInput = document.querySelectorAll("input[name='user_email']")),
+    // (phoneInput = document.querySelectorAll("input[name='user_phone']"));
+  };
+  for (let i = 1; i < 4; i++) {
+    let form = document.getElementById("form" + i);
+    sendForm(form);
+  }
 });
