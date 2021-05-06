@@ -26,7 +26,7 @@ const sendForm = (form) => {
       //console.log("val: ", val);
       body[key] = val;
     });
-    //console.log("body: ", body);
+    console.log("body: ", body);
 
     postData(body)
       .then((response) => {
@@ -45,10 +45,10 @@ const sendForm = (form) => {
     //console.log(data);
     return fetch("server.php", {
       method: "POST",
-
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify(data),
     });
     // return new Promise((resolve, reject) => {
     //   const request = new XMLHttpRequest();
