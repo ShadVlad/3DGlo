@@ -506,39 +506,52 @@ window.addEventListener("DOMContentLoaded", function () {
       //   body[val[0]] = val[1]
       // }
       formData.forEach((val, key) => {
+        //console.log("val: ", val);
         body[key] = val;
       });
       //console.log("body: ", body);
 
       postData(body)
-        .then(() => {
+        .then((response) => {
+          if (response.status !== 200) {
+            throw new Error("status network not 200");
+          }
           statusMessage.textContent = successMessage;
+          clearForm();
         })
         .catch(() => {
           statusMessage.textContent = errorMessage;
         });
     });
 
-    const postData = (body) => {
-      return new Promise((resolve, reject) => {
-        const request = new XMLHttpRequest();
-        request.addEventListener("readystatechange", () => {
-          statusMessage.textContent = loadMessage;
-          if (request.readyState !== 4) {
-            return;
-          }
-          if (request.status === 200) {
-            resolve();
-            clearForm();
-          } else {
-            reject(request.status);
-          }
-        });
-        request.open("POST", "server.php");
-        request.setRequestHeader("Content-Type", "application/json");
-
-        request.send(JSON.stringify(body));
+    const postData = (data) => {
+      //console.log(data);
+      return fetch("server.php", {
+        metod: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
+      // return new Promise((resolve, reject) => {
+      //   const request = new XMLHttpRequest();
+      //   request.addEventListener("readystatechange", () => {
+      //     statusMessage.textContent = loadMessage;
+      //     if (request.readyState !== 4) {
+      //       return;
+      //     }
+      //     if (request.status === 200) {
+      //       resolve();
+      //       clearForm();
+      //     } else {
+      //       reject(request.status);
+      //     }
+      //   });
+      //   request.open("POST", "server.php");
+      //   request.setRequestHeader("Content-Type", "application/json");
+
+      //   request.send(JSON.stringify(data));
+      // });
     };
 
     const clearForm = () => {
