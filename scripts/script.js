@@ -527,7 +527,7 @@ window.addEventListener("DOMContentLoaded", function () {
     const postData = (data) => {
       //console.log(data);
       return fetch("server.php", {
-        metod: "POST",
+        method: "POST",
         body: JSON.stringify(data),
         headers: {
           "Content-Type": "application/json",
