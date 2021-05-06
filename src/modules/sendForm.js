@@ -45,7 +45,7 @@ const sendForm = (form) => {
     //console.log(data);
     return fetch("server.php", {
       method: "POST",
-      body: JSON.stringify(data),
+
       headers: {
         "Content-Type": "application/json",
       },
