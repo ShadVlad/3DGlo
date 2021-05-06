@@ -326,8 +326,12 @@ window.addEventListener("DOMContentLoaded", function () {
       } else {
         total = 0;
       }
+      console.log("total: ", total);
+      if (total > 0) {
+        outNum(total);
+      }
 
-      totalValue.textContent = total;
+      //totalValue.textContent = total;
     };
     calcBlock.addEventListener("change", (event) => {
       const target = event.target;
@@ -356,6 +360,25 @@ window.addEventListener("DOMContentLoaded", function () {
       //console.log("item: ", item);
       item.addEventListener("keyup", readInputSumm);
     });
+
+    //const time = 10;
+    //const step = 2;
+    function outNum(num) {
+      console.log("num: ", num);
+      //let e = document.querySelector("#out");
+      n = 0;
+      //let t = Math.round(time / num / step);
+      //console.log("t: ", t);
+      let interval = setInterval(() => {
+        n = n + step;
+        if (n == num) {
+          clearInterval(interval);
+        }
+        totalValue.textContent = n;
+      }, 0.0001);
+    }
+
+    //outNum(100, "#out");
   };
   calculator(100);
 
