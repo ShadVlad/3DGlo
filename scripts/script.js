@@ -522,23 +522,25 @@ window.addEventListener("DOMContentLoaded", function () {
     });
 
     const postData = (body, outputData, errorData) => {
-      const request = new XMLHttpRequest();
-      request.addEventListener("readystatechange", () => {
-        statusMessage.textContent = loadMessage;
-        if (request.readyState !== 4) {
-          return;
-        }
-        if (request.status === 200) {
-          outputData();
-          clearForm();
-        } else {
-          errorData(request.status);
-        }
-      });
-      request.open("POST", "server.php");
-      request.setRequestHeader("Content-Type", "application/json");
+      return new Promise(() => {
+        const request = new XMLHttpRequest();
+        request.addEventListener("readystatechange", () => {
+          statusMessage.textContent = loadMessage;
+          if (request.readyState !== 4) {
+            return;
+          }
+          if (request.status === 200) {
+            outputData();
+            clearForm();
+          } else {
+            errorData(request.status);
+          }
+        });
+        request.open("POST", "server.php");
+        request.setRequestHeader("Content-Type", "application/json");
 
-      request.send(JSON.stringify(body));
+        request.send(JSON.stringify(body));
+      });
     };
 
     const clearForm = () => {
