@@ -366,16 +366,34 @@ window.addEventListener("DOMContentLoaded", function () {
     function outNum(num) {
       console.log("num: ", num);
       //let e = document.querySelector("#out");
-      n = 0;
+      let n = 0;
+      //let step = 1;
       //let t = Math.round(time / num / step);
       //console.log("t: ", t);
       let interval = setInterval(() => {
-        n = n + step;
-        if (n == num) {
+        n = n + 1;
+        // switch (n) {
+        //   case 10:
+        //     step = 5;
+        //     break;
+        //   case 100:
+        //     step = 50;
+        //     break;
+        //   case 1000:
+        //     step = 500;
+        //     break;
+        //   case 10000:
+        //     step = 5000;
+        //     break;
+
+        //   default:
+        //     break;
+        // }
+        if (n >= num) {
           clearInterval(interval);
         }
         totalValue.textContent = n;
-      }, 0.0001);
+      }, 0);
     }
 
     //outNum(100, "#out");
