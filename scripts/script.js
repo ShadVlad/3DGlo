@@ -510,19 +510,17 @@ window.addEventListener("DOMContentLoaded", function () {
       });
       //console.log("body: ", body);
 
-      postData(
-        body,
-        () => {
+      postData(body)
+        .then(() => {
           statusMessage.textContent = successMessage;
-        },
-        (error) => {
+        })
+        .catch(() => {
           statusMessage.textContent = errorMessage;
-        }
-      );
+        });
     });
 
-    const postData = (body, outputData, errorData) => {
-      return new Promise(() => {
+    const postData = (body) => {
+      return new Promise((resolve, reject) => {
         const request = new XMLHttpRequest();
         request.addEventListener("readystatechange", () => {
           statusMessage.textContent = loadMessage;
@@ -530,10 +528,10 @@ window.addEventListener("DOMContentLoaded", function () {
             return;
           }
           if (request.status === 200) {
-            outputData();
+            resolve();
             clearForm();
           } else {
-            errorData(request.status);
+            reject(request.status);
           }
         });
         request.open("POST", "server.php");
