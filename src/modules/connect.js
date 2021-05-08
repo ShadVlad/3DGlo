@@ -8,7 +8,11 @@ const connect = () => {
 
   const readInputName = (event) => {
     //console.log("nameInput: ", event);
+    //while (event.target.value.length < 30) {
     event.target.value = event.target.value.replace(/[^А-Яа-яЁё\s]+$/, "");
+    //.slice(30);
+    //}
+    //return;
   };
 
   const readInputMessage = (event) => {
@@ -30,6 +34,10 @@ const connect = () => {
 
   const fixedName = () => {
     let val = event.target.value.replace(/\-{2,}/g, "-");
+    if (val.length < 2 || val.length > 30) {
+      alert("Имя должно содержать от 2 до 30 символов");
+      //return;
+    }
     val = val.split(/\s+/);
     event.target.value = val
       .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
@@ -42,6 +50,7 @@ const connect = () => {
 
   const fixedText = () => {
     let val = event.target.value.replace(/\-{2,}/g, "-");
+
     val = val.split(/\s+/);
     val[0] = val[0].charAt(0).toUpperCase() + val[0].slice(1);
     //val.map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
@@ -49,7 +58,12 @@ const connect = () => {
   };
   const fixedPhone = () => {
     let val = event.target.value.replace(/[^\d\+]/, "");
-    //console.log("val: ", val.length);
+
+    if (val.length < 7 || val.length > 12) {
+      alert(
+        "Номер телефона должен содержать от 7 до 12 символов с учетом плюса!"
+      );
+    } //console.log("val: ", val.length);
 
     //console.log("val: ", val);
     val = val.replace(/\-{2,}/g, "-");
@@ -70,6 +84,12 @@ const connect = () => {
       if (event.target.matches("input[name='user_name']")) {
         //console.log("event.target: ", event.target);
         readInputName(event);
+        if (event.target.value.length > 30) {
+          alert("Имя должно содержать от 2 до 30 символов");
+          event.target.value = event.target.value.slice(0, 30);
+          //console.log("event.target.value: ", event.target.value);
+          return;
+        }
         //event.target.addEventListener("blur", correct);
       } else if (event.target.matches("input[name='user_message']")) {
         readInputMessage(event);
@@ -77,6 +97,14 @@ const connect = () => {
         readInputEmail(event);
       } else if (event.target.matches("input[name='user_phone']")) {
         readInputPhone(event);
+        if (event.target.value.length > 12) {
+          alert(
+            "Номер телефона должен содержать от 7 до 12 символов с учетом плюса!"
+          );
+          event.target.value = event.target.value.slice(0, 12);
+          //console.log("event.target.value: ", event.target.value);
+          return;
+        }
       }
     });
     // item.addEventListener("blur", (event) => {
