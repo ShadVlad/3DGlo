@@ -37,7 +37,8 @@ window.addEventListener("DOMContentLoaded", function () {
   // menu
   const toggleMenu = () => {
     const btnMenu = document.querySelector(".menu"),
-      menu = document.querySelector("menu");
+      menu = document.querySelector("menu"),
+      bodytag = document.querySelector("body");
     //0closeBtn = document.querySelector(".close-btn"),
     //menuItems = menu.querySelectorAll("ul>li");
 
@@ -45,18 +46,21 @@ window.addEventListener("DOMContentLoaded", function () {
       menu.classList.toggle("active-menu");
     };
 
-    btnMenu.addEventListener("click", handlerMenu);
+    //btnMenu.addEventListener("click", handlerMenu);
 
-    menu.addEventListener("click", (event) => {
+    bodytag.addEventListener("click", (event) => {
       let target = event.target;
 
+      let targetM = target.closest(".menu");
+      //console.log("target: ", targetM);
       if (target.classList.contains("close-btn")) {
         handlerMenu();
-      } else {
-        //target = target.closest("li");
-        if (target.tagName === "A") {
-          handlerMenu();
-        }
+      } else if (target.tagName === "A") {
+        console.log("target: ", target);
+
+        handlerMenu();
+      } else if (targetM) {
+        handlerMenu();
       }
     });
     // closeBtn.addEventListener("click", handlerMenu);
@@ -125,6 +129,7 @@ window.addEventListener("DOMContentLoaded", function () {
     // console.log("tabContent: ", tabContent);
     // console.log("tabHeader: ", tabHeader);
     // console.log("tab: ", tab);
+
     const toggleTabContent = (index) => {
       for (let i = 0; i < tabContent.length; i++) {
         if (index === i) {
@@ -137,6 +142,7 @@ window.addEventListener("DOMContentLoaded", function () {
       }
     };
 
+    toggleTabContent(0);
     tabHeader.addEventListener("click", (event) => {
       let target = event.target;
       console.log("target: ", target);
@@ -160,4 +166,356 @@ window.addEventListener("DOMContentLoaded", function () {
   };
 
   tabs();
+
+  //slider
+  const slider = () => {
+    const slide = document.querySelectorAll(".portfolio-item"),
+      btn = document.querySelectorAll(".portfolio-btn"),
+      dots = document.querySelector(".portfolio-dots"),
+      slider = document.querySelector(".portfolio-content");
+    let dot;
+
+    const addDot = () => {
+      for (let i = 1; i <= slide.length; i++) {
+        let newDot = document.createElement("li");
+        //console.log("newDot: ", newDot);
+        newDot.classList.add("dot");
+        if (i === 1) {
+          newDot.classList.add("dot-active");
+        }
+        dots.append(newDot);
+        //console.log("dots: ", dots);
+      }
+
+      dot = document.querySelectorAll(".dot");
+    };
+    let currentSlide = 0,
+      interval;
+    const prevSlide = (elem, index, strClass) => {
+      elem[index].classList.remove(strClass);
+    };
+    const nextSlide = (elem, index, strClass) => {
+      elem[index].classList.add(strClass);
+    };
+    const autoPlaySlide = () => {
+      //console.log("dot: ", dot);
+      //console.log("currentSlide: ", currentSlide);
+      prevSlide(slide, currentSlide, "portfolio-item-active");
+      prevSlide(dot, currentSlide, "dot-active");
+      currentSlide++;
+      currentSlide = currentSlide % slide.length;
+      //console.log("currentSlide: ", currentSlide);
+      nextSlide(slide, currentSlide, "portfolio-item-active");
+      nextSlide(dot, currentSlide, "dot-active");
+    };
+
+    const startSlide = (time = 3000) => {
+      interval = setInterval(autoPlaySlide, time);
+    };
+
+    const stopSlide = () => {
+      clearInterval(interval);
+    };
+
+    slider.addEventListener("click", (event) => {
+      event.preventDefault();
+      let target = event.target;
+
+      if (!target.matches(".portfolio-btn, .dot")) {
+        return;
+      }
+      prevSlide(slide, currentSlide, "portfolio-item-active");
+      prevSlide(dot, currentSlide, "dot-active");
+
+      if (target.matches("#arrow-right")) {
+        currentSlide++;
+      } else if (target.matches("#arrow-left")) {
+        currentSlide--;
+      } else if (target.matches(".dot")) {
+        dot.forEach((elem, index) => {
+          if (elem === target) {
+            currentSlide = index;
+          }
+        });
+      }
+      //console.log("currentSlide: ", currentSlide);
+
+      if (currentSlide >= slide.length) {
+        currentSlide = 0;
+      }
+      if (currentSlide < 0) {
+        currentSlide = slide.length - 1;
+      }
+
+      nextSlide(slide, currentSlide, "portfolio-item-active");
+      nextSlide(dot, currentSlide, "dot-active");
+      //console.log("currentSlide: ", currentSlide);
+    });
+    slider.addEventListener("mouseover", (event) => {
+      if (
+        event.target.matches(".portfolio-btn") ||
+        event.target.matches(".dot")
+      ) {
+        stopSlide();
+      }
+    });
+
+    slider.addEventListener("mouseout", (event) => {
+      if (
+        event.target.matches(".portfolio-btn") ||
+        event.target.matches(".dot")
+      ) {
+        startSlide();
+      }
+    });
+
+    addDot();
+    startSlide(1500);
+  };
+
+  slider();
+
+  // command
+  const command = () => {
+    const commands = document.querySelector(".command");
+    commands.addEventListener("mouseover", (event) => {
+      if (event.target.matches(".command__photo")) {
+        event.target.src = event.target.dataset.img;
+        //console.log("event.target.src: ", event.target.dataset.img);
+      }
+    });
+
+    commands.addEventListener("mouseout", (event) => {
+      if (event.target.matches(".command__photo")) {
+        event.target.src = event.target.dataset.img.replace("a.", ".");
+        //console.log("event.target.src: ", event.target.dataset.img);
+      }
+    });
+  };
+
+  command();
+
+  //calculator
+  const calculator = (price = 100) => {
+    const calcBlock = document.querySelector(".calc-block"),
+      calcType = document.querySelector(".calc-type"),
+      calcSquare = document.querySelector(".calc-square"),
+      calcDay = document.querySelector(".calc-day"),
+      calcCount = document.querySelector(".calc-count"),
+      totalValue = document.getElementById("total"),
+      summInput = document.querySelectorAll(".calc-item");
+
+    console.log("totalValue: ", totalValue.textContent);
+    const countSum = () => {
+      let total = 0,
+        countValue = 1,
+        dayValue = 1;
+      const typeValue = calcType.options[calcType.selectedIndex].value,
+        squareValue = +calcSquare.value;
+
+      if (calcCount.value > 1) {
+        countValue += (calcCount.value - 1) / 10;
+      }
+
+      if (calcDay.value && calcDay.value < 5) {
+        dayValue *= 2;
+      } else if (calcDay.value && calcDay.value < 10) {
+        dayValue *= 1.5;
+      }
+      //console.log("typeValue: ", typeValue);
+      //console.log("squareValue: ", squareValue);
+      if (typeValue && squareValue) {
+        total = price * typeValue * squareValue * countValue * dayValue;
+        total = typeValue == 1.4 ? total.toFixed(2) : total;
+        //console.log("typeValue: ", typeValue);
+        //console.log("total: ", total);
+      } else {
+        total = 0;
+      }
+
+      totalValue.textContent = total;
+    };
+    calcBlock.addEventListener("change", (event) => {
+      const target = event.target;
+      // if (
+      //   target.matches(".calc-type") ||
+      //   target.matches(".calc-square") ||
+      //   target.matches(".calc-day") ||
+      //   target.matches(".calc-count")
+      // ) {
+      //   console.log(1);
+      // }
+      //
+
+      if (target.matches("select") || target.matches("input")) {
+        countSum();
+      }
+    });
+    //console.log("nameInput: ", summInput);
+
+    const readInputSumm = (event) => {
+      //console.log("event: ", event);
+      event.target.value = event.target.value.replace(/[^0-9]/, "");
+    };
+
+    summInput.forEach((item) => {
+      //console.log("item: ", item);
+      item.addEventListener("keyup", readInputSumm);
+    });
+  };
+  calculator(100);
+
+  //connect
+  const connect = () => {
+    const formInput = document.querySelectorAll("form"),
+      nameInput = document.querySelectorAll("input[name='user_name']"),
+      messageInput = document.querySelectorAll("input[name='user_message']"),
+      emailInput = document.querySelectorAll("input[name='user_email']"),
+      phoneInput = document.querySelectorAll("input[name='user_phone']");
+    console.log("formInput: ", formInput);
+
+    const readInputName = (event) => {
+      //console.log("nameInput: ", event);
+      event.target.value = event.target.value.replace(/[^А-Яа-яЁё\s\W]+$/, "");
+    };
+    const readInputPhone = (event) => {
+      //console.log("nameInput: ", event);
+      event.target.value = event.target.value.replace(/[^\d\-\()]/, "");
+    };
+
+    const readInputEmail = (event) => {
+      //console.log("nameInput: ", event);
+      event.target.value = event.target.value.replace(
+        /[^A-Za-z\.\@\-\!\*\'\~]/,
+        ""
+      );
+    };
+
+    const fixedName = () => {
+      let val = event.target.value.replace(/\-{2,}/g, "-");
+      val = val.split(/\s+/);
+      event.target.value = val
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" ");
+      console.log(
+        "value: ",
+        val.map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")
+      );
+    };
+
+    const fixedText = () => {
+      let val = event.target.value.replace(/\-{2,}/g, "-");
+      val = val.split(/\s+/);
+      val[0] = val[0].charAt(0).toUpperCase() + val[0].slice(1);
+      //val.map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+      event.target.value = val.map((w) => w).join(" ");
+    };
+    const fixedPhone = () => {
+      let val = event.target.value.replace(/[^\d\()\-]/, "");
+      //console.log("val: ", val);
+      val = val.replace(/\-{2,}/g, "-");
+      //console.log("val: ", val);
+      event.target.value = val;
+      //console.log("event: ", event.target.value);
+    };
+    const fixedEmail = () => {
+      let val = event.target.value.replace(/[^A-Za-z\.\@\-\!\*\'\~]/g, "");
+      val = val.replace(/\-{2,}/g, "-");
+      val = val.replace(/\-/, "");
+      val = val.replace(/\-$/, "");
+      event.target.value = val;
+      console.log("event: ", val);
+    };
+    formInput.forEach((item) => {
+      item.addEventListener("keyup", (event) => {
+        if (
+          event.target.matches("input[name='user_name']") ||
+          event.target.matches("input[name='user_message']")
+        ) {
+          console.log("event.target: ", event.target);
+          readInputName(event);
+          //event.target.addEventListener("blur", correct);
+        } else if (event.target.matches("input[name='user_email']")) {
+          readInputEmail(event);
+        } else if (event.target.matches("input[name='user_phone']")) {
+          readInputPhone(event);
+        }
+      });
+      // item.addEventListener("blur", (event) => {
+      //   console.log("event.target: ", event.target);
+      // });
+    });
+    nameInput.forEach((item) => {
+      //item.addEventListener("keyup", readInputName);
+      item.addEventListener("blur", (event) => {
+        //console.log("event.target blur: ", event.target);
+        fixedName();
+      });
+    });
+
+    messageInput.forEach((item) => {
+      //item.addEventListener("keyup", readInputName);
+      item.addEventListener("blur", (event) => {
+        //console.log("event.target: ", event.target);
+        fixedText();
+      });
+    });
+
+    phoneInput.forEach((item) => {
+      //item.addEventListener("keyup", readInputPhone);
+      item.addEventListener("blur", (event) => {
+        console.log("event.target: ", event.target);
+        fixedPhone();
+      });
+    });
+
+    emailInput.forEach((item) => {
+      //item.addEventListener("keyup", readInputEmail);
+      item.addEventListener("blur", (event) => {
+        //console.log("event.target: ", event.target);
+        fixedEmail();
+      });
+    });
+  };
+  connect();
+
+  const scrollblock = () => {
+    const btnScroll = document.querySelector('a[href="#service-block"]');
+    menuItems = document.querySelectorAll("a");
+
+    // for (i = 0; i < menuItems.length; i++) {
+    //   //if (menuItems[i].getAttribute("href").length > 3) {
+    //   menuItems[i].addEventListener("click", () => {
+    //     console.log("menuItems: ", i);
+    //   });
+    // }
+    //
+    //menuItems[i].remove();
+    //}
+    //menuItems.splice(7);
+    menuItems.forEach((item) => {
+      item.addEventListener("click", () => {
+        event.preventDefault();
+        const hrefStr = item.getAttribute("href");
+        console.log("hrefStr: ", hrefStr);
+
+        document.querySelector(hrefStr).scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      });
+    });
+    //console.log("menuItems: ", menuItems);
+
+    btnScroll.addEventListener("click", () => {
+      event.preventDefault();
+      //console.log("btnScroll: ", btnScroll);
+      const blockID = btnScroll.getAttribute("href");
+      document.querySelector(blockID).scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
+  };
+  scrollblock();
 });
