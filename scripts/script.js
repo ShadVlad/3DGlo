@@ -136,6 +136,7 @@ window.addEventListener("DOMContentLoaded", function () {
         }
       }
     };
+    toggleTabContent(0);
 
     tabHeader.addEventListener("click", (event) => {
       let target = event.target;
@@ -320,7 +321,7 @@ window.addEventListener("DOMContentLoaded", function () {
       //console.log("squareValue: ", squareValue);
       if (typeValue && squareValue) {
         total = price * typeValue * squareValue * countValue * dayValue;
-        total = typeValue == 1.4 ? total.toFixed(2) : total;
+        total = typeValue == 1.4 ? total.toFixed(0) : total;
         //console.log("typeValue: ", typeValue);
         //console.log("total: ", total);
       } else {
@@ -367,28 +368,28 @@ window.addEventListener("DOMContentLoaded", function () {
       console.log("num: ", num);
       //let e = document.querySelector("#out");
       let n = 0;
-      //let step = 1;
+      let step = 1;
       //let t = Math.round(time / num / step);
       //console.log("t: ", t);
       let interval = setInterval(() => {
-        n = n + 1;
-        // switch (n) {
-        //   case 10:
-        //     step = 5;
-        //     break;
-        //   case 100:
-        //     step = 50;
-        //     break;
-        //   case 1000:
-        //     step = 500;
-        //     break;
-        //   case 10000:
-        //     step = 5000;
-        //     break;
+        n = n + step;
+        switch (n) {
+          case 10:
+            step = 2;
+            break;
+          case 100:
+            step = 10;
+            break;
+          case 1000:
+            step = 100;
+            break;
+          case 10000:
+            step = 1000;
+            break;
 
-        //   default:
-        //     break;
-        // }
+          default:
+            break;
+        }
         if (n >= num) {
           clearInterval(interval);
         }
