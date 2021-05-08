@@ -17,6 +17,7 @@ const tabs = () => {
     }
   };
 
+  toggleTabContent(0);
   tabHeader.addEventListener("click", (event) => {
     let target = event.target;
     console.log("target: ", target);
@@ -31,7 +32,7 @@ const tabs = () => {
         if (item === target) {
           toggleTabContent(i);
         }
-        //    });
+        //    })i
         //    return;
       });
       //  target = target.parentNode;

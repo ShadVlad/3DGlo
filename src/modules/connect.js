@@ -49,6 +49,8 @@ const connect = () => {
   };
   const fixedPhone = () => {
     let val = event.target.value.replace(/[^\d\+]/, "");
+    console.log("val: ", val.length);
+
     //console.log("val: ", val);
     val = val.replace(/\-{2,}/g, "-");
     //console.log("val: ", val);
@@ -100,7 +102,10 @@ const connect = () => {
   phoneInput.forEach((item) => {
     //item.addEventListener("keyup", readInputPhone);
     item.addEventListener("blur", (event) => {
-      //console.log("event.target: ", event.target);
+      let val = event.target.value;
+      //
+      //   readInputPhone(event);
+      // } //console.log("event.target: ", event.target);
       fixedPhone();
     });
   });

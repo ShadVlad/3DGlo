@@ -14,7 +14,6 @@ const sendForm = (form) => {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    form.appendChild(statusMessage);
     const formData = new FormData(form);
     //console.log("formData: ", formData);
     let body = {};
@@ -23,10 +22,25 @@ const sendForm = (form) => {
     //   body[val[0]] = val[1]
     // }
     formData.forEach((val, key) => {
-      //console.log("val: ", val);
       body[key] = val;
+      console.log("key: " + key + " val: " + val);
     });
-    console.log("body: ", body);
+
+    if (body["user_name"].length < 2) {
+      alert("Имя должно содержать не менее 2 символов");
+      return;
+    } else if (
+      body["user_phone"].length < 7 ||
+      body["user_phone"].length > 12
+    ) {
+      alert(
+        "Номер телефона должен содержать от 7 до 12 символов с учетом плюса!"
+      );
+      return;
+    } else {
+      statusMessage.textContent = loadMessage;
+      form.appendChild(statusMessage);
+    }
 
     postData(body)
       .then((response) => {
