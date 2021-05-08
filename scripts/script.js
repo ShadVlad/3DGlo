@@ -125,6 +125,7 @@ window.addEventListener("DOMContentLoaded", function () {
     // console.log("tabContent: ", tabContent);
     // console.log("tabHeader: ", tabHeader);
     // console.log("tab: ", tab);
+
     const toggleTabContent = (index) => {
       for (let i = 0; i < tabContent.length; i++) {
         if (index === i) {
@@ -137,6 +138,7 @@ window.addEventListener("DOMContentLoaded", function () {
       }
     };
 
+    toggleTabContent(0);
     tabHeader.addEventListener("click", (event) => {
       let target = event.target;
       console.log("target: ", target);
@@ -472,4 +474,44 @@ window.addEventListener("DOMContentLoaded", function () {
     });
   };
   connect();
+
+  const scrollblock = () => {
+    const btnScroll = document.querySelector('a[href="#service-block"]');
+    menuItems = document.querySelectorAll("a");
+
+    // for (i = 0; i < menuItems.length; i++) {
+    //   //if (menuItems[i].getAttribute("href").length > 3) {
+    //   menuItems[i].addEventListener("click", () => {
+    //     console.log("menuItems: ", i);
+    //   });
+    // }
+    //
+    //menuItems[i].remove();
+    //}
+    //menuItems.splice(7);
+    menuItems.forEach((item) => {
+      item.addEventListener("click", () => {
+        event.preventDefault();
+        const hrefStr = item.getAttribute("href");
+        console.log("hrefStr: ", hrefStr);
+
+        document.querySelector(hrefStr).scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      });
+    });
+    //console.log("menuItems: ", menuItems);
+
+    btnScroll.addEventListener("click", () => {
+      event.preventDefault();
+      //console.log("btnScroll: ", btnScroll);
+      const blockID = btnScroll.getAttribute("href");
+      document.querySelector(blockID).scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
+  };
+  scrollblock();
 });
