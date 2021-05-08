@@ -7,7 +7,7 @@ const togglePopUp = () => {
   let animeInterval, count;
   const popUpAnimate = () => {
     animeInterval = requestAnimationFrame(popUpAnimate);
-    count++;
+    count += 5;
 
     if (count < 38) {
       popupContent.style.left = count + "%";

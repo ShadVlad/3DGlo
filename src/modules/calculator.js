@@ -28,7 +28,7 @@ const calculator = (price = 100) => {
     //console.log("squareValue: ", squareValue);
     if (typeValue && squareValue) {
       total = price * typeValue * squareValue * countValue * dayValue;
-      total = typeValue == 1.4 ? total.toFixed(2) : total;
+      total = typeValue == 1.4 ? total.toFixed(0) : total;
       //console.log("typeValue: ", typeValue);
       //console.log("total: ", total);
     } else {

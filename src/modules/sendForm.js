@@ -1,5 +1,6 @@
 const sendForm = (form) => {
-  const errorMessage = "Что-то пошло не так...",
+  const popUp = document.querySelector(".popup"),
+    errorMessage = "Что-то пошло не так...",
     loadMessage = "Загрузка...",
     successMessage = "Спасибо! Мы скоро с Вами свяжемся!";
 
@@ -27,7 +28,7 @@ const sendForm = (form) => {
     });
 
     if (body["user_name"].length < 2) {
-      alert("Имя должно содержать не менее 2 символов");
+      alert("Имя должно содержать от 2 до 30 символов");
       return;
     } else if (
       body["user_phone"].length < 7 ||
@@ -49,6 +50,9 @@ const sendForm = (form) => {
         }
         statusMessage.textContent = successMessage;
         clearForm();
+        setTimeout(() => {
+          popUp.style.display = "none";
+        }, 5000);
       })
       .catch(() => {
         statusMessage.textContent = errorMessage;
