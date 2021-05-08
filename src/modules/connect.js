@@ -49,7 +49,7 @@ const connect = () => {
   };
   const fixedPhone = () => {
     let val = event.target.value.replace(/[^\d\+]/, "");
-    console.log("val: ", val.length);
+    //console.log("val: ", val.length);
 
     //console.log("val: ", val);
     val = val.replace(/\-{2,}/g, "-");

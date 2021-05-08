@@ -4,7 +4,7 @@ const sendForm = (form) => {
     loadMessage = "Загрузка...",
     successMessage = "Спасибо! Мы скоро с Вами свяжемся!";
 
-  console.log("form: ", form.id);
+  //console.log("form: ", form.id);
 
   const statusMessage = document.createElement("div");
   statusMessage.style.cssText = "font-size: 2rem;";
@@ -24,7 +24,7 @@ const sendForm = (form) => {
     // }
     formData.forEach((val, key) => {
       body[key] = val;
-      console.log("key: " + key + " val: " + val);
+      //console.log("key: " + key + " val: " + val);
     });
 
     if (body["user_name"].length < 2) {

@@ -20,9 +20,9 @@ const tabs = () => {
   toggleTabContent(0);
   tabHeader.addEventListener("click", (event) => {
     let target = event.target;
-    console.log("target: ", target);
+    //console.log("target: ", target);
     target = target.closest(".service-header-tab");
-    console.log("target: ", target);
+    //console.log("target: ", target);
 
     //while (target !== tabHeader) {
     //console.log("target: ", target);
